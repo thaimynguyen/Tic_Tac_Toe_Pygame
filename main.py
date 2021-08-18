@@ -1,3 +1,6 @@
+# 2 Player game 
+# Board size can be customized
+
 import pygame
 import numpy as np
 
