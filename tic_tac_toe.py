@@ -3,9 +3,9 @@
 
 import numpy as np
 
-BOARD_SIZE = (3, 3)
+BOARD_SIZE = (5, 5)
 
-def print_board(board):
+def print_board(board: np.ndarray):
     for i in board:
         for j in i:
             if j == 0:
@@ -16,26 +16,26 @@ def print_board(board):
                 print('X', end=' ')
         print()
 
-def print_player_turn(player):
+def print_player_turn(player: int):
     if player == 1:
         print("'O' turn:")
     elif player == -1:
         print("'X' turn:")
 
-def is_cell_empty(board, move: int):
+def is_cell_empty(board: np.ndarray, move: int):
     NUM_COL = np.shape(board)[1]
     if board[(move-1)//NUM_COL][(move%NUM_COL)-1] == 0:
         return True
     return False
 
-def is_board_full(board):
+def is_board_full(board: np.ndarray):
     for i in board:
         for j in i:
             if j == 0:
                 return False
     return True
 
-def check_winner(board):
+def check_winner(board: np.ndarray):
     NUM_COL = np.shape(board)[1]
     sum_cols = np.sum(board, axis=0)
     sum_rows = np.sum(board, axis=1)
@@ -46,11 +46,11 @@ def check_winner(board):
         winner = 'X'
     return winner
 
-def play_game(board, player):
+def play_game(board: np.ndarray, player: int):
     NUM_COL = np.shape(board)[1]
-    print('O will play first.')
     while not is_board_full(board):
-        move = input(f'Please enter a position 1 through 9 or enter "q" to quit: \n')
+        print_player_turn(player)
+        move = input(f'Please enter a position from 1 to {BOARD_SIZE[0]*BOARD_SIZE[1]} or enter "q" to quit: \n')
         if move == 'q':
             break
         try:
@@ -63,7 +63,6 @@ def play_game(board, player):
                 if winner:
                     print(f'{winner} wins!')
                     break
-                print_player_turn(player)
             elif move not in range(1, NUM_COL**2+1):
                 print('Invalid Input')
             elif not is_cell_empty(board, move):
@@ -78,11 +77,11 @@ MAIN LOOP:
 
 def main():
     board = np.zeros(BOARD_SIZE)
-    print(board)
     print_board(board)
     player = 1
     play_game(board, player)
-
+    if is_board_full(board) and not check_winner(board):
+        print("It's a tie!")
 
 if __name__ == "__main__":
     main()
