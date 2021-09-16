@@ -10,11 +10,7 @@ Major things that I want to focus on learning in this project
 - Apply Unit Testing: Pytest
 
 
-## Technology used in Project :hotsprings:
-<img target="_blank" src="https://github.com/yogeshnile/technology/blob/master/pygame_logo.gif" width="200">
-
-
-## ScreenShot :camera_flash:
+## ScreenShot
 <p align="center">
   <img src="https://github.com/thaimynguyen/Tic_Tac_Toe_Pygame/blob/main/2021-08-12%2023_24_16-Tic%20Tac%20Toe.png" width="350">
 </p>
@@ -26,10 +22,9 @@ Major things that I want to focus on learning in this project
 - Run: python main.py
 
 
-## Connect with me! 🌐
+## Connect with me!
 
-[<img target="_blank" src="https://img.icons8.com/bubbles/100/000000/linkedin.png" title="LinkedIn">](https://www.linkedin.com/in/thaimynguyen/)  
-[<img target="_blank" src="https://img.icons8.com/bubbles/100/000000/github.png" title="Github">](https://github.com/thaimynguyen)
+[<img target="_blank" src="https://img.icons8.com/bubbles/100/000000/linkedin.png" title="LinkedIn">](https://www.linkedin.com/in/thaimynguyen/)  [<img target="_blank" src="https://img.icons8.com/bubbles/100/000000/github.png" title="Github">](https://github.com/thaimynguyen)
 
 ## Email Me :e-mail:
 [<img target="_blank" src="https://img.icons8.com/bubbles/100/000000/secured-letter.png" title="Mail me">](mailto:thaimynguyen@gmail.com)
