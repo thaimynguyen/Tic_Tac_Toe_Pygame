@@ -1,4 +1,4 @@
-# Tic Tac Toe with Pygame.
+# Tic Tac Toe with Pygame
 
 ## Learning Goals
 Major things that I want to focus on learning in this project
