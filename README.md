@@ -2,7 +2,7 @@
 
 ## Learning Goals
 Major things that I want to focus on learning in this project
-- Get familiar with Pygame - setting up screen, drawing figures, adding sounds & score board.  
+- Get familiar with Pygame - setting up screen, drawing figures, adding sounds etc.  
 - Create an efficient algorithm to check & draw the winning line
 - Apply Unit Testing: Pytest
 
