@@ -1,4 +1,8 @@
 # Tic Tac Toe with Pygame
+[![Language](https://img.shields.io/badge/language-python-blue.svg?style=flat)](https://www.python.org)
+[![Module](https://img.shields.io/badge/module-pygame-brightgreen.svg?style=flat)](http://www.pygame.org/news.html)
+[![Module](https://img.shields.io/badge/module-numpy-%23013243.svg?style=flat)](https://numpy.org/)
+
 - Dynamic & Interactive GUI game implemented using Python
 - A two player Tic-Tac-Toe game
 - Players can set their board size e.g. 3x3, 4x4 or 5x5 etc.
