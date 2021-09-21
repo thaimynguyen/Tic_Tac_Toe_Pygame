@@ -9,17 +9,13 @@ CONSTANTS:
 """
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = SCREEN_WIDTH
-NUM_COL = 3
-NUM_ROW = NUM_COL
-SQUARE_SIDE = SCREEN_WIDTH // NUM_COL
+SIDE = 3
+SQUARE_SIDE = SCREEN_WIDTH // SIDE
 MIDDLE_POINT = SQUARE_SIDE // 2
 MARGIN = SQUARE_SIDE // 5
-
-
 BORDER_WIDTH = 10
 LINE_WIDTH = 5
 CIRCLE_RADIUS = SQUARE_SIDE // 3
-
 font = pygame.font.SysFont("comicsans", SCREEN_WIDTH // 5)
 
 # Define colours using RGB:
@@ -32,17 +28,17 @@ YELLOW = (255, 255, 0)
 # Set up Pygame window:
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+
 """
 FUNCTIONS:
 """
 
 
 def initialize_window():
-    global SCREEN, board, player, game_over, running
-    board = np.zeros((NUM_ROW, NUM_COL), dtype=int)
+    global SCREEN, board, player, game_over
+    boardy = np.zeros((SIDE, SIDE), dtype=int)
     player = 1
     game_over = False
-    running = True
     pygame.display.set_caption("Tic Tac Toe")
     SCREEN.fill(WHITE)
     draw_grid()
@@ -50,27 +46,27 @@ def initialize_window():
 
 def draw_grid():
     global SCREEN
-    for x in range(1, NUM_COL):
+    for x in range(1, SIDE):
         # vertical borders
         pygame.draw.line(
             SCREEN,
             BLACK,
-            (SCREEN_WIDTH // NUM_COL * x - BORDER_WIDTH // 2, 0),
-            (SCREEN_WIDTH // NUM_COL * x - BORDER_WIDTH // 2, SCREEN_WIDTH),
+            (SCREEN_WIDTH // SIDE * x - BORDER_WIDTH // 2, 0),
+            (SCREEN_WIDTH // SIDE * x - BORDER_WIDTH // 2, SCREEN_WIDTH),
             BORDER_WIDTH,
         )
         # horizontal borders
         pygame.draw.line(
             SCREEN,
             BLACK,
-            (0, SCREEN_HEIGHT // NUM_ROW * x - BORDER_WIDTH // 2),
-            (SCREEN_HEIGHT, SCREEN_HEIGHT // NUM_ROW * x - BORDER_WIDTH // 2),
+            (0, SCREEN_HEIGHT // SIDE * x - BORDER_WIDTH // 2),
+            (SCREEN_HEIGHT, SCREEN_HEIGHT // SIDE * x - BORDER_WIDTH // 2),
             BORDER_WIDTH,
         )
     pygame.display.update()
 
 
-def draw_figures(player, x_index, y_index):
+def draw_figures(player: int, x_index: int, y_index: int):
     if player == 1:  # Player O
         pygame.draw.circle(
             SCREEN,
@@ -102,16 +98,17 @@ def draw_figures(player, x_index, y_index):
         )
 
 
-def check_winner(board):
+def check_winner(board: np.array) -> str:
     sum_cols = np.sum(board, axis=0)
     sum_rows = np.sum(board, axis=1)
+    winning_sum = len(board)
     winning_col = None
     winning_row = None
     winner = None
 
     # check & draw vertical winning lines
-    if NUM_COL in sum_cols:
-        winning_col = int(list(np.where(sum_cols == NUM_COL))[0])
+    if winning_sum in sum_cols:
+        winning_col = int(list(np.where(sum_cols == winning_sum))[0])
         pygame.draw.line(
             SCREEN,
             BLUE,
@@ -120,8 +117,8 @@ def check_winner(board):
             LINE_WIDTH,
         )
         winner = "O"
-    elif -NUM_COL in sum_cols:
-        winning_col = int(list(np.where(sum_cols == -NUM_COL))[0])
+    elif -winning_sum in sum_cols:
+        winning_col = int(list(np.where(sum_cols == -winning_sum))[0])
         pygame.draw.line(
             SCREEN,
             RED,
@@ -132,8 +129,8 @@ def check_winner(board):
         winner = "X"
 
     # check & draw horizontal winning lines
-    elif NUM_COL in sum_rows:
-        winning_row = int(list(np.where(sum_rows == NUM_COL))[0])
+    elif winning_sum in sum_rows:
+        winning_row = int(list(np.where(sum_rows == winning_sum))[0])
         pygame.draw.line(
             SCREEN,
             BLUE,
@@ -142,8 +139,8 @@ def check_winner(board):
             LINE_WIDTH,
         )
         winner = "O"
-    elif -NUM_COL in sum_rows:
-        winning_row = int(list(np.where(sum_rows == -NUM_COL))[0])
+    elif -winning_sum in sum_rows:
+        winning_row = int(list(np.where(sum_rows == -winning_sum))[0])
         pygame.draw.line(
             SCREEN,
             RED,
@@ -154,7 +151,7 @@ def check_winner(board):
         winner = "X"
 
     # check & draw diagonal winning lines:
-    elif sum(np.diagonal(board)) == NUM_COL:
+    elif sum(np.diagonal(board)) == winning_sum:
         pygame.draw.line(
             SCREEN,
             BLUE,
@@ -163,7 +160,7 @@ def check_winner(board):
             LINE_WIDTH,
         )
         winner = "O"
-    elif sum(np.diagonal(board)) == -NUM_COL:
+    elif sum(np.diagonal(board)) == -winning_sum:
         pygame.draw.line(
             SCREEN,
             RED,
@@ -172,7 +169,7 @@ def check_winner(board):
             LINE_WIDTH,
         )
         winner = "X"
-    elif sum(np.rot90(board).diagonal()) == NUM_COL:
+    elif sum(np.rot90(board).diagonal()) == winning_sum:
         pygame.draw.line(
             SCREEN,
             BLUE,
@@ -181,7 +178,7 @@ def check_winner(board):
             LINE_WIDTH,
         )
         winner = "O"
-    elif sum(np.rot90(board).diagonal()) == -NUM_COL:
+    elif sum(np.rot90(board).diagonal()) == -winning_sum:
         pygame.draw.line(
             SCREEN,
             RED,
@@ -194,42 +191,41 @@ def check_winner(board):
     return winner
 
 
-def check_board_full(board):
-    for row in range(NUM_ROW):
-        for col in range(NUM_COL):
+def check_board_full(board: np.array) -> bool:
+    for row in range(len(board)):
+        for col in range(len(board)):
             if board[row][col] == 0:
                 return False
     return True
 
 
-def display_winner(winner):
+def display_winner(winner: str):
     if winner != None:
         result = winner + " WON!"
     else:
         result = "It's a draw!"
 
-    text = font.render(result, True, YELLOW, BLACK)
-    text_rect = text.get_rect()
-    text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-    SCREEN.blit(text, text_rect)
+    winner_text = font.render(result, True, YELLOW, BLACK)
+    winner_text_rect = winner_text.get_rect()
+    winner_text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+    SCREEN.blit(winner_text, winner_text_rect)
     pygame.display.update()
 
 
-def check_gameover(winner, board):
+def check_game_over(winner: str, board: np.array):
+    global game_over
     if winner != None or check_board_full(board):
         display_winner(winner)
         game_over = True
-        return game_over
 
 
-def click_board(x, y, board, player):
-    global game_over
+def click_board(x: int, y: int, board: np.array, player: int):
     x_index, y_index = x // SQUARE_SIDE, y // SQUARE_SIDE
     if board[y_index][x_index] == 0:
         board[y_index][x_index] = player
         draw_figures(player, x_index, y_index)
         winner = check_winner(board)
-        game_over = check_gameover(winner, board)
+        check_game_over(winner, board)
     pygame.display.update()
 
 
@@ -238,7 +234,6 @@ def run_game():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
             pygame.mixer.Sound("click_sound.mp3").play()
@@ -246,27 +241,20 @@ def run_game():
             player *= -1
 
 
-def reset_game():
-    time.sleep(3)
-    initialize_window()
-
-    text = font.render("NEW GAME", True, WHITE, BLACK)
-    text_rect = text.get_rect()
-    text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-    SCREEN.blit(text, text_rect)
+def reset_game() -> bool:
+    reset_text = font.render("NEW GAME", True, WHITE, BLACK)
+    reset_text_rect = reset_text.get_rect()
+    reset_text_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT * 2 // 3)
+    SCREEN.blit(reset_text, reset_text_rect)
     pygame.display.update()
-
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if text_rect.collidepoint(event.pos):
-                    running = True
-                    time.sleep(1)
+                if reset_text_rect.collidepoint(event.pos):
                     initialize_window()
-                    return running
+                    return True
 
 
 """
@@ -276,9 +264,8 @@ MAIN LOOP:
 
 def main():
     initialize_window()
-    while running:
+    while True:
         run_game()
-
         if game_over:
             reset_game()
 
